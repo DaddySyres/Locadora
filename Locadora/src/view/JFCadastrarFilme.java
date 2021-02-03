@@ -1,14 +1,13 @@
 package view;
 
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
+import javax.swing.*;
 
 import model.bean.Filme;
 import model.dao.FilmeDAO;
@@ -33,6 +32,7 @@ public class JFCadastrarFilme extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtTitulo;
 	private JTextField txtCategoria;
+	private final Action action = new SwingAction();
 
 	/**
 	 * Launch the application.
@@ -161,28 +161,35 @@ public class JFCadastrarFilme extends JFrame {
 		contentPane.add(btnCadastrar);
 		
 		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtTitulo.setText(null);
+				txtSinopse.setText(null);
+				txtCategoria.setText(null);
+				spTempo.setValue(0);
+				imagem.clearSelection();
+				audio.clearSelection();
+			}
+		});
+		btnLimpar.setAction(action);
 		btnLimpar.setBounds(137, 400, 89, 23);
 		contentPane.add(btnLimpar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(269, 400, 89, 23);
-		contentPane.add(btnCancelar);
-		
-		//formata a data
-		JDateChooser dtInicial = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
-		//inicia com a data atual
-		dtInicial.setDate(new Date());
-		//tamanho
-		dtInicial.setBounds(297, 23, 122, 20);
-		//seleciona todo o campo ao ganhar focus
-		dtInicial.getDateEditor().getUiComponent().addFocusListener(new FocusAdapter() {
-
-			public void focusGained(FocusEvent e) {
-		((JTextFieldDateEditor)e.getSource()).selectAll();
-		}
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
 		});
-		//adiciona o componente no painel
-		contentPane.add(dtInicial);
-
+		btnCancelar.setBounds(269, 400, 89, 23);
+		contentPane.add(btnCancelar); 
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "Limpar");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
 	}
 }

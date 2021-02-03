@@ -3,29 +3,28 @@ package model.bean;
 public class Cliente {
 	
 	private int cId;
-	private String cName;
-	private String cSurname;
+	private String cNome;
+	private String cCPF;
 	private String cEmail;
-	private String cPhone;
-	private String cAddress;
-	
+	private String cTelefone;
+	private String cEndereco;
 	public int getcId() {
 		return cId;
 	}
 	public void setcId(int cId) {
 		this.cId = cId;
 	}
-	public String getcName() {
-		return cName;
+	public String getcNome() {
+		return cNome;
 	}
-	public void setcName(String cName) {
-		this.cName = cName;
+	public void setcNome(String cNome) {
+		this.cNome = cNome;
 	}
-	public String getcSurname() {
-		return cSurname;
+	public String getcCPF() {
+		return cCPF;
 	}
-	public void setcSurname(String cSurname) {
-		this.cSurname = cSurname;
+	public void setcCPF(String cCPF) {
+		this.cCPF = cCPF;
 	}
 	public String getcEmail() {
 		return cEmail;
@@ -33,17 +32,18 @@ public class Cliente {
 	public void setcEmail(String cEmail) {
 		this.cEmail = cEmail;
 	}
-	public String getcPhone() {
-		return cPhone;
+	public String getcTelefone() {
+		return cTelefone;
 	}
-	public void setcPhone(String cPhone) {
-		this.cPhone = cPhone;
+	public void setcTelefone(String cTelefone) {
+		this.cTelefone = cTelefone;
 	}
-	public String getcAddress() {
-		return cAddress;
+	public String getcEndereco() {
+		return cEndereco;
 	}
-	public void setcAddress(String cAddress) {
-		this.cAddress = cAddress;
+	public void setcEndereco(String cEndereco) {
+		this.cEndereco = cEndereco;
 	}
-
+	
+	
 }

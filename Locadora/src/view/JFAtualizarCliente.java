@@ -1,37 +1,36 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
 
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
 import model.bean.Cliente;
+import model.bean.Filme;
 import model.dao.ClienteDAO;
-
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.awt.event.ActionEvent;
+import model.dao.FilmeDAO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-public class JFCadastrarCliente extends JFrame {
+public class JFAtualizarCliente extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txt_clienteNome;
 	private JTextField txt_clienteCPF;
 	private JTextField txt_clienteEmail;
-	private JTextField txt_cleinteEndereco;
+	private JTextField txt_clienteEndereco;
+	private static int id;
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
 
@@ -42,7 +41,7 @@ public class JFCadastrarCliente extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JFCadastrarCliente frame = new JFCadastrarCliente();
+					JFAtualizarCliente frame = new JFAtualizarCliente(id);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,9 +52,8 @@ public class JFCadastrarCliente extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * @throws ParseException 
 	 */
-	public JFCadastrarCliente() throws ParseException {
+	public JFAtualizarCliente(int id) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 690, 420);
 		contentPane = new JPanel();
@@ -63,10 +61,24 @@ public class JFCadastrarCliente extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		
+		
 		JLabel lblNewLabel = new JLabel("Cadastrar cliente ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNewLabel.setBounds(10, 10, 199, 38);
 		contentPane.add(lblNewLabel);
+		
+		ClienteDAO cdao = new ClienteDAO();
+		Cliente c = cdao.read(id);
+		
+		JLabel lblNewLabel_7 = new JLabel("ID do Cliente:");
+		lblNewLabel_7.setBounds(543, 10, 63, 30);
+		contentPane.add(lblNewLabel_7);
+		
+		JLabel idLabel = new JLabel("New label");
+		idLabel.setBounds(616, 10, 63, 30);
+		contentPane.add(idLabel);
+		
 		
 		JLabel lblNewLabel_1 = new JLabel("Nome");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -95,8 +107,14 @@ public class JFCadastrarCliente extends JFrame {
 		lblNewLabel_1_1.setBounds(10, 178, 74, 21);
 		contentPane.add(lblNewLabel_1_1);
 		
-		MaskFormatter mf1 = new MaskFormatter("(##) #####-####");
-	    mf1.setPlaceholderCharacter('_');
+		MaskFormatter mf1;
+		try {
+			mf1 = new MaskFormatter("(##) #####-####");
+			mf1.setPlaceholderCharacter('_');
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JFormattedTextField txt_clienteTelefone = new JFormattedTextField();
 		txt_clienteTelefone.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txt_clienteTelefone.setToolTipText("");
@@ -120,28 +138,38 @@ public class JFCadastrarCliente extends JFrame {
 		lblNewLabel_1_1_2.setBounds(445, 178, 74, 21);
 		contentPane.add(lblNewLabel_1_1_2);
 		
-		txt_cleinteEndereco = new JTextField();
-		txt_cleinteEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txt_cleinteEndereco.setBounds(10, 149, 656, 19);
-		contentPane.add(txt_cleinteEndereco);
-		txt_cleinteEndereco.setColumns(10);
+		txt_clienteEndereco = new JTextField();
+		txt_clienteEndereco.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_clienteEndereco.setBounds(10, 149, 656, 19);
+		contentPane.add(txt_clienteEndereco);
+		txt_clienteEndereco.setColumns(10);
 		
-		JButton btnSubmit = new JButton("Cadastrar");
-		btnSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		idLabel.setText(String.valueOf(c.getcId()));
+		txt_clienteNome.setText(c.getcNome());
+		txt_clienteCPF.setText(c.getcCPF());
+		txt_clienteEmail.setText(c.getcEmail());
+		txt_clienteTelefone.setText(c.getcTelefone());
+		txt_clienteEndereco.setText(c.getcEndereco());
+
+		
+		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				Cliente c = new Cliente();
-				ClienteDAO cDAO = new ClienteDAO();
+				ClienteDAO cdao = new ClienteDAO();
+	
+				c.setcId(Integer.parseInt(idLabel.getText()));
+				c.setcEndereco(txt_clienteEndereco.getText());
 				c.setcNome(txt_clienteNome.getText());
 				c.setcCPF(txt_clienteCPF.getText());
 				c.setcEmail(txt_clienteEmail.getText());
 				c.setcTelefone(txt_clienteTelefone.getText());
-				c.setcEndereco(txt_cleinteEndereco.getText());
-				cDAO.create(c);
+				cdao.update(c);
 			}
 		});
-		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSubmit.setBounds(10, 340, 111, 33);
-		contentPane.add(btnSubmit);
+		btnAlterar.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnAlterar.setBounds(10, 340, 111, 33);
+		contentPane.add(btnAlterar);
 		
 		JButton btnClear = new JButton("Limpar");
 		btnClear.addActionListener(new ActionListener() {
@@ -150,15 +178,20 @@ public class JFCadastrarCliente extends JFrame {
 				txt_clienteCPF.setText(null);
 				txt_clienteEmail.setText(null);
 				txt_clienteTelefone.setText(null);
-				txt_cleinteEndereco.setText(null);
-				}
-			});
+				txt_clienteEndereco.setText(null);
+			}
+		});
 		btnClear.setAction(action);
 		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnClear.setBounds(131, 340, 111, 33);
 		contentPane.add(btnClear);
 		
 		JButton btnCancel = new JButton("Cancelar");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		btnCancel.setAction(action_1);
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnCancel.setBounds(252, 340, 111, 33);
@@ -166,7 +199,7 @@ public class JFCadastrarCliente extends JFrame {
 	}
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {
-			putValue(NAME, "SwingAction");
+			putValue(NAME, "Limpar");
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
@@ -174,7 +207,7 @@ public class JFCadastrarCliente extends JFrame {
 	}
 	private class SwingAction_1 extends AbstractAction {
 		public SwingAction_1() {
-			putValue(NAME, "SwingAction_1");
+			putValue(NAME, "Cancelar");
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
